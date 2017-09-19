@@ -2,26 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { Heroe } from './../heroe';
 import { Input } from '@angular/core';
 
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import { HeroService } from './../heroe.service';
+import 'rxjs/add/operator/switchMap';
+
 @Component({
   selector: 'app-heroe-detail',
   templateUrl: './heroe-detail.component.html',
-  styleUrls: ['./heroe-detail.component.css'],
-  template: `
-  <div *ngIf="heroe"> <!-- Para evitar error de consola al cargar, ya que selected heroe es undefined-->
-    <h2>{{heroe.name}} details!</h2>
-    <div><label>id: </label>{{heroe.id}}</div>
-    <div>
-      <label>name: </label>
-      <input [(ngModel)]="heroe.name" placeholder="name"/>
-    </div>
-  </div>
-`
+  styleUrls: ['./heroe-detail.component.css']
 })
 export class HeroeDetailComponent implements OnInit {
   @Input() heroe: Heroe;
-  constructor() { }
+  constructor(
+    private heroService: HeroService,
+    private route: ActivatedRoute,
+    private location: Location) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.route.paramMap
+    .switchMap((params: ParamMap) => this.heroService.getHero(+params.get('id')))
+    .subscribe(heroe => this.heroe = heroe);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
 }

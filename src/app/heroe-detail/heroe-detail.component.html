@@ -1,3 +1,9 @@
-<p>
-  heroe-detail works!
-</p>
+<div *ngIf="heroe"> <!-- Para evitar error de consola al cargar, ya que selected heroe es undefined-->
+  <h2>{{heroe.name}} details!</h2>
+  <div><label>id: </label>{{heroe.id}}</div>
+  <div>
+    <label>name: </label>
+    <input [(ngModel)]="heroe.name" placeholder="name"/>
+  </div>
+  <button (click)="goBack()">Back</button>
+</div>
